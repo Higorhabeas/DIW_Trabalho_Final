@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+ Trabalho Interdisciplinar 1 - Aplicações Web
+
+ Esse módulo implementa um mapa utilizando a API Mapbox
+
+ Você deve criar uma conta no ambiente do Mapbox e criar
+ uma access token para que você consiga que a API do Mapbox
+ funcione para o seu site
+
+ Nesse exemplo criamos uma estrutura de dados com os endereços 
+ das unidades da PUC Minas e colocamos um marcador para cada 
+ unidade no mapa.
+
+ URL Projeto Mapbox: https://replit.com/@rommelpuc/Mapbox
+
+ Autor: Rommel Vieira Carneiro
+ Data: 09/11/2023
+
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <!-- DIV que receberá o mapa -->
+    <div id="map"></div>
+
+    <script>
+        // ----------------------------------------------
+        // Cria uma estrutura de dados com informações das unidades da PUC Minas 
+        let unidadesPUC = [
+            {
+                id: 1,
+                descricao: 'PUC Minas - Coração Eucarístico',
+                endereco: 'Rua Dom José Gaspar, 500',
+                cidade: 'Belo Horizonte',
+                latlong: [-43.992911,-19.923564],
+                url: 'https://www.pucminas.br',
+                cor: 'red'
+            },
+            {
+                id: 2,
+                descricao: 'PUC Minas - Praça da Liberdade',
+                endereco: 'Av. Brasil, 2023 - Funcionários',
+                cidade: 'Belo Horizonte',
+                latlong: [-43.9397233,-19.9332786],
+                url: 'https://www.pucminas.br/unidade/praca-da-liberdade/Paginas/default.aspx',
+                cor: 'red'
+            },
+            {
+                id: 3,
+                descricao: 'PUC Minas - Barreiro',
+                endereco: 'Avenida Afonso Vaz de Melo, 1.200 - Barreiro',
+                cidade: 'Belo Horizonte',
+                latlong: [-44.025818,-19.976609],
+                url: 'https://www.pucminas.br/unidade/barreiro/Paginas/default.aspx',
+                cor: 'red'
+            },
+            {
+                id: 4,
+                descricao: 'PUC Minas - São Gabriel',
+                endereco: 'Rua Walter Ianni, 255 - São Gabriel',
+                cidade: 'Belo Horizonte',
+                latlong: [-43.917967,-19.859226],
+                url: 'https://www.pucminas.br/unidade/sao-gabriel/Paginas/default.aspx',
+                cor: 'red'
+            },
+            {
+                id: 5,
+                descricao: 'PUC Minas - Contagem',
+                endereco: 'R. Rio Comprido, 4.580',
+                cidade: 'Contagem',
+                latlong: [-44.076069,-19.939135],
+                url: 'https://www.pucminas.br/unidade/contagem/Paginas/default.aspx',
+                cor: 'blue' 
+            },
+            {
+                id: 6,
+                descricao: 'PUC Minas - Betim',
+                endereco: 'R. do Rosário, 1.081 Bairro Angola',
+                cidade: 'Betim',
+                latlong: [-44.1984331,-19.9550716],
+                url: 'https://www.pucminas.br/unidade/betim/Paginas/default.aspx',
+                cor: 'blue'    
+            },
+            {
+                id: 7,
+                descricao: 'PUC Minas - Poços de Caldas',
+                endereco: 'Av. Pe. Cletus Francis Cox, 1.661',
+                cidade: 'Poços de Caldas',
+                latlong: [-46.5944649,-21.78904],
+                url: 'https://www.pucpcaldas.br/',
+                cor: 'green'    
+            }
+        ]
+
+        // --------------------------------------------------
+        // Cria o mapa baseado na API Mapbox e adiciona no 
+        // elemento de id: map        
+        // --------------------------------------------------
+
+        // ----------------------------------------------
+        // Cria o mapa e adiciona no elemento de id: map 
+        const centralLatLong= [-43.9397233,-19.9332786]
+
+        // ----------------------------------------------
+        // Crie uma conta no Mapbox e adicione sua accessToken 
+        // na linha abaixo
+        mapboxgl.accessToken = 'pk.eyJ1Ijoicm9tbWVsY2FybmVpcm8tcHVjIiwiYSI6ImNsb3ZuMTBoejBsd2gyamwzeDZzcWl5b3oifQ.VPWc3qoyon8Z_-URfKpvKg';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: centralLatLong,
+            zoom: 9
+        });
+
+
+        // ----------------------------------------------
+        // Adiciona marcadores para unidades da PUC Minas
+        unidadesPUC.forEach ((uni) => {
+            var popup = new mapboxgl.Popup({ offset: 25 })
+                .setHTML(`<h3><a href="${uni.url}" target="_blank">${uni.descricao}</a></h3><br>
+                          ${uni.endereco} <br> ${uni.cidade}`);
+            const marker = new mapboxgl.Marker({ color: uni.cor })
+                .setLngLat(uni.latlong)
+                .setPopup(popup)
+                .addTo(map);     
+        }) 
+    </script>
+</body>
+</html>
